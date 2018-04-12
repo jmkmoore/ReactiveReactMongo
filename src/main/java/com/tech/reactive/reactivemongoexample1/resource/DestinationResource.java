@@ -15,6 +15,7 @@ import reactor.util.function.Tuple2;
 import java.awt.*;
 import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
@@ -54,4 +55,11 @@ public class DestinationResource {
                         .map(Tuple2::getT2);
         });
     }
+
+    @GetMapping("/submit-destination/{location}")
+    public Mono<Destination> submitLocation(@PathVariable final String location) {
+        return destinationRepository.insert(new Destination(UUID.randomUUID().toString(),
+                location, null));
+    }
+
 }
