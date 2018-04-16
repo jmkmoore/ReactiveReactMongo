@@ -8,6 +8,8 @@ class DestinationInput extends React.Component<{}, { userInput: string }>  {
         this.state = {
             userInput: ''
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.addLocationToRepo = this.addLocationToRepo.bind(this);
     }
 
     componentDidMount() {
@@ -18,12 +20,17 @@ class DestinationInput extends React.Component<{}, { userInput: string }>  {
     }
 
     addLocationToRepo() {
-        if (this.state.userInput != null || '') {
-            fetch('http://localhost:8080/submit-destination', {
-                body: JSON.stringify( this.state.userInput )
+        if (this.state.userInput !== '') {
+            fetch('http://localhost:8080/rest/destination/submit-destination', {
+                method: 'POST',
+                body: JSON.stringify(this.state.userInput)
             })
                 .then(response => response.json());
         }
+    }
+
+    handleChange(event: any) {
+        this.setState({userInput: event.target.value});
     }
 
     render() {
@@ -31,9 +38,13 @@ class DestinationInput extends React.Component<{}, { userInput: string }>  {
             <div>
                 <form>
                     New Location:<br/>
-                    <input type="text" value={this.state.userInput} name="location"/><br/>
+                    <input
+                        type="location"
+                        value={this.state.userInput}
+                        onChange={this.handleChange}
+                    /><br/>
                 </form><br/>
-                <Button onClick={this.addLocationToRepo()}>Something</Button>
+                <Button onClick={this.addLocationToRepo}>Submit Destination</Button>
             </div>
         );
     }

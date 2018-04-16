@@ -4,10 +4,7 @@ import com.tech.reactive.reactivemongoexample1.model.Destination;
 import com.tech.reactive.reactivemongoexample1.model.DestinationEvent;
 import com.tech.reactive.reactivemongoexample1.repository.DestinationRepository;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -56,8 +53,9 @@ public class DestinationResource {
         });
     }
 
-    @GetMapping("/submit-destination/{location}")
-    public Mono<Destination> submitLocation(@PathVariable final String location) {
+    @CrossOrigin(origins = {"http://localhost:3000"})
+    @PostMapping("/submit-destination")
+    public Mono<Destination> submitLocation(@RequestBody String location) {
         return destinationRepository.insert(new Destination(UUID.randomUUID().toString(),
                 location, null));
     }
